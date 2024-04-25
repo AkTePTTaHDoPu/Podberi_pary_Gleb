@@ -101,10 +101,20 @@ namespace WindowsFormsApp2
                 secondClicked = clickedLabel;
                 secondClicked.ForeColor = Color.Black;
 
+                CheckForWinner();
+
                 // If the player gets this far, the player 
                 // clicked two different icons, so start the 
                 // timer (which will wait three quarters of 
                 // a second, and then hide the icons)
+
+                if (firstClicked.Text == secondClicked.Text)
+                {
+                    firstClicked = null;
+                    secondClicked = null;
+                    return;
+                }
+
                 timer1.Start();
             }
         }
@@ -123,6 +133,29 @@ namespace WindowsFormsApp2
             // clicked, the program knows it's the first click
             firstClicked = null;
             secondClicked = null;
+        }
+
+        private void CheckForWinner()
+        {
+            // Go through all of the labels in the TableLayoutPanel, 
+            // checking each one to see if its icon is matched
+            foreach (Control control in tableLayoutPanel1.Controls)
+            {
+                Label iconLabel = control as Label;
+
+                if (iconLabel != null)
+                {
+                    if (iconLabel.ForeColor == iconLabel.BackColor)
+                        return;
+                }
+            }
+
+            // If the loop didn’t return, it didn't find
+            // any unmatched icons
+            // That means the user won. Show a message and close the form
+            MessageBox.Show("You matched all the icons!", "Congratulations");
+            Close();
+
         }
     }
 }
